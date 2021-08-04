@@ -53,7 +53,7 @@ public class DaoGame {
         BeanGame beanGame = null;
         try{
             con = ConnectionMySQL.getConnection();
-            cstm = con.prepareCall("select * from empleados where idempleados = ?");
+            cstm = con.prepareCall("select * from empleados where idgame = ?");
             cstm.setInt(1,id);
             rs = cstm.executeQuery();
 
