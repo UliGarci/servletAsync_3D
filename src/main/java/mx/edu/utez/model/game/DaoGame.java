@@ -5,6 +5,7 @@ import mx.edu.utez.service.ConnectionMySQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -73,54 +74,61 @@ public class DaoGame {
         return beanGame;
     }
 
-    public int agregar(BeanGame beanGame){
+    public boolean agregar(BeanGame beanGame, InputStream image){
+        boolean flag = false;
+        BeanCategory beanCategory = new BeanCategory();
         try{
             con = ConnectionMySQL.getConnection();
             cstm = con.prepareCall("{call registergame(?,?,?,?)}");
             cstm.setString(1,beanGame.getNombregame());
-            cstm.setInt(2,beanGame.getCategory_idcategory());
+            //cstm.setInt(2,beanGame.getCategory_idcategory());
             cstm.setString(3,beanGame.getDatepremiere());
             cstm.setInt(4,beanGame.getStatus());
-
+            cstm.setBlob(5,image);
             cstm.executeUpdate();
+            flag=true;
         }catch(SQLException e){
             CONSOLE.error("Ha ocurrido un error: " + e.getMessage());
         }finally {
             ConnectionMySQL.closeConnections(con,cstm);
         }
-        return g;
+        return flag;
     }
 
-    public int actualizar(BeanGame beanGame){
+    public boolean actualizar(BeanGame beanGame){
+        boolean flag = false;
         try{
             con = ConnectionMySQL.getConnection();
             cstm = con.prepareCall("{call modifygame(?,?,?,?,?,?,?,?)}");
 
             cstm.setString(1,beanGame.getNombregame());
-            cstm.setInt(2,beanGame.getCategory_idcategory());
+           // cstm.setInt(2,beanGame.getCategory_idcategory());
             cstm.setString(3,beanGame.getDatepremiere());
             cstm.setInt(4,beanGame.getStatus());
-
             cstm.executeUpdate();
+            flag = true;
         }catch (SQLException e){
             CONSOLE.error("Ha ocurrido un error: " + e.getMessage());
         }finally {
             ConnectionMySQL.closeConnections(con,cstm);
         }
-        return g;
+        return flag;
     }
 
-    public void eliminar(int idgame){
+    public boolean eliminar(int idgame){
+        boolean flag=false;
         try{
             con = ConnectionMySQL.getConnection();
             cstm = con.prepareCall("{call deletegame(?)}");
             cstm.setInt(1,idgame);
             cstm.executeUpdate();
+            flag=true;
         }catch(SQLException e){
             CONSOLE.error("Ha ocurrido un error: " + e.getMessage());
         }finally {
             ConnectionMySQL.closeConnections(con,cstm);
         }
+        return flag;
     }
 
 }
