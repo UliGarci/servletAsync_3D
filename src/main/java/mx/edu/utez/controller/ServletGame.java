@@ -26,7 +26,7 @@ public class ServletGame extends HttpServlet {
         if(session.getAttribute("session")!=null) {
             //request.setAttribute("listgames", new DaoGame().findAll());
             //request.getRequestDispatcher("views/game/games.jsp").forward(request, response);
-            map.put("listGames",new DaoGame().findAll());
+            map.put("listgames",new DaoGame().findAll());
             write(response,map);
         }else{
             request.getRequestDispatcher("/").forward(request,response);
